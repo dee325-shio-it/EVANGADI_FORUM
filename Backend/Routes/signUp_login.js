@@ -65,3 +65,36 @@ router.post("/register", checkSignUp, async (req, res) => {
     });
   }
 });
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password required" });
+    }
+
+    const [users] = await dbConnection
+      .promise()
+      .execute("SELECT * FROM userTable WHERE email = ?", [email]);
+
+    if (users.length === 0) {
+      return res.status(401).json({ error: "Wrong email or password" });
+    }
+
+    const user = users[0];
+    const isCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isCorrect) {
+      return res.status(401).json({ error: "Wrong email or password" });
+    }
+
+    const token = makeToken(user.userid);
+    res.json({ token, message: "Logged in successfully" });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+export default router;
