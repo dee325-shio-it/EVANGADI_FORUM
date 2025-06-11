@@ -1,0 +1,147 @@
+import { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../utils/auth";
+import { baseURL } from "../utils/api";
+
+const SignIn = () => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await baseURL.post("/api/auth/login", formData);
+
+      // Ensure the response contains a token
+      if (!response.data?.token) {
+        throw new Error("No token received");
+      }
+
+      // Call login and wait for it to complete
+      const loginSuccess = await login(response.data.token);
+
+      if (loginSuccess) {
+        navigate("/", { replace: true });
+      } else {
+        setError("Authentication failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(
+        err.response?.data?.error ||
+          err.message ||
+          "Login failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="p-3">
+      <div className="text-center mb-4">
+        <h2 className="text-center mb-3">Join the network</h2>
+        <p className="text-center mb-5">
+          Don't have an account?{" "}
+          <NavLink
+            className="auth-link"
+            to="/auth?tab=signup"
+            style={{ color: "#f28c38", textDecoration: "none" }}
+          >
+            Create a new account
+          </NavLink>
+        </p>
+      </div>
+
+      {error && (
+        <div className="alert alert-danger alert-dismissible fade show">
+          {error}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setError("")}
+          ></button>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3 position-relative">
+          <div className="input-group">
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="mb-3 position-relative">
+          <div className="input-group">
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="d-flex justify-content-between mb-3">
+          <div className="form-check"></div>
+          <NavLink
+            to="/forgot-password"
+            className="text-decoration-none auth-link"
+          >
+            Forgot password?
+          </NavLink>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-primary w-100 py-2 mb-3"
+          style={{ backgroundColor: "#5069F0" }}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Signing in...
+            </>
+          ) : (
+            "Sign In"
+          )}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default SignIn;
