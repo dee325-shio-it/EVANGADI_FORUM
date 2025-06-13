@@ -93,11 +93,18 @@ body {
   color: var(--bg-white);
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 6px 24px;       /* smaller height, wider button */
   font-size: 16px;
   cursor: pointer;
-  margin-bottom: 20px;
+  display: block;
+  width: 160px;            /* slightly wider */
+  height: 35px;            /* shorter height */
+  text-align: center;
+  text-decoration: none;
 }
+
+
+
 
 .home-ask-btn a {
   color: var(--bg-white);
@@ -107,6 +114,34 @@ body {
 .home-ask-btn:hover {
   background: #0056d2;
 }
+
+/* Remove all borders from question list container */
+.card {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove borders from list group container */
+.list-group {
+  border: none !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Remove all borders from each list item */
+.list-group-item {
+  border: none !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom: 1px solid #ddd !important; /* bottom line separator */
+  border-radius: 0 !important;
+}
+
+/* Remove bottom border on last list item */
+.list-group-item:last-child {
+  border-bottom: none !important;
+}
+
 
 .question-list {
   list-style: none;
@@ -226,20 +261,27 @@ body {
   font-size: 20px;
   color: var(--text-dark);
   margin-bottom: 10px;
+  text-align: center; /* Center the heading */
 }
 
 .ask-content ul {
   list-style: disc;
-  padding-left: 20px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto; /* Center the ul block */
+  padding-left: 0;           /* Remove default padding */
+  width: fit-content;        /* Shrink width to content */
+  text-align: left;          /* Keep list items left-aligned */
 }
 
+
 .ask-form {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-right: 2px solid #ccc;     /* Right border */
+  border-bottom: 2px solid #ccc;    /* Bottom border */
   padding: 20px;
   text-align: center;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+  border-radius: 10px;
 }
+
 
 .ask-form h3 {
   font-family: "Montserrat", sans-serif;
@@ -253,8 +295,8 @@ body {
   width: 100%;
   padding: 10px;
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  border-radius: 15px;
+  margin-bottom: 4px;
 }
 
 .ask-form textarea {
@@ -267,10 +309,14 @@ body {
   color: var(--bg-white);
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 6px 12px;
+  font-size: 14px;
   cursor: pointer;
+  display: block;       /* Makes the button take full width unless restricted */
+  margin-left: 0;       /* Aligns it to the left */
+  
 }
+
 
 .ask-btn:hover {
   background: #0056d2;
