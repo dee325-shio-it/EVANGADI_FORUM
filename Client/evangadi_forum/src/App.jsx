@@ -13,6 +13,8 @@ import Ask from "./pages/Ask";
 import "./index.css";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ForgotPassword from "./pages/Forgotpassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
               <Route path="ask" element={<Ask />} />
             </Route>
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Routes>
         </main>
         <Footer />

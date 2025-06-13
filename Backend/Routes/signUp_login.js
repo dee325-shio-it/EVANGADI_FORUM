@@ -4,6 +4,10 @@ import { makeToken } from "../TokenGenerator/JWT.js";
 import dbConnection from "../Database/database_config.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import {
+  forgotPassword,
+  resetPassword,
+} from "../Control_password/passwordRecovery.js";
 
 dotenv.config();
 const router = express.Router();
@@ -57,11 +61,11 @@ router.post("/register", checkSignUp, async (req, res) => {
 
     res.status(201).json({ message: "Registration successful!" });
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Registration error:", error); // ✅ Logs the actual issue in terminal
     res.status(500).json({
       error: "Registration failed",
-      details:
-        process.env.NODE_ENV === "development" ? error.message : undefined,
+      details: error.message, // ✅ Send the real error back
+      stack: error.stack, // ✅ Optional: see where it occurred
     });
   }
 });
@@ -96,5 +100,8 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
+
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 export default router;
