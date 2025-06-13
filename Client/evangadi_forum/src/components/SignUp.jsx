@@ -1,19 +1,9 @@
-/**
- * Sign-up component for Evangadi Forum
- * Production Summary: Provides a registration form with validation and API integration per project requirements.
- */
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { baseURL } from "../utils/api"; // Changed from axios
-import "bootstrap/dist/css/bootstrap.min.css";
+import { baseURL } from "../utils/api";
 
-/**
- * Renders sign-up form with validation and submits to /api/register
- * @returns {JSX.Element} Sign-up component
- */
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    username: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -29,7 +19,6 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      !formData.username ||
       !formData.firstName ||
       !formData.lastName ||
       !formData.email ||
@@ -49,8 +38,6 @@ const SignUp = () => {
 
     try {
       await baseURL.post("/api/auth/register", {
-        // Changed from axios
-        username: formData.username,
         firstname: formData.firstName,
         lastname: formData.lastName,
         email: formData.email,
@@ -63,21 +50,16 @@ const SignUp = () => {
   };
 
   return (
-    <div
-      className="card p-4 mx-auto border-0 d-flex"
-      style={{ maxWidth: "400px" }}
-    >
-      <h2 className="text-center mb-3">Join the network</h2>
-      <p className=" text-center mb-5">
-        Already have an acocunt?{" "}
-        <NavLink className="auth-link"
-          to="/auth?tab=login"
-          style={{ color: "#f28c38", textDecoration: "none", }}
-        >
-          Sign in
-        </NavLink>
-      </p>
-      {/* <h2 className="text-center mb-4">Create Account</h2> */}
+    <div className="">
+      <div className="text-center mb-4">
+        <h2>Join the network</h2>
+        <p>
+          Already have an account?{" "}
+          <NavLink to="/auth?tab=login" style={{ color: "#f28c38" }}>
+            Sign in
+          </NavLink>
+        </p>
+      </div>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit} className="auth-form">
         {/* Username Field */}
@@ -124,7 +106,7 @@ const SignUp = () => {
           <input
             type="email"
             className="form-control form-input"
-            placeholder="Email"
+            placeholder="Email address"
             name="email"
             value={formData.email}
             onChange={handleChange}

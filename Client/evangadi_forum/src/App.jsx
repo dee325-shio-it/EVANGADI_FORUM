@@ -53,6 +53,7 @@ import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./pages/Forgotpassword";
 import ResetPassword from "./pages/ResetPassword";
+import About from "./pages/About";
 
 function AppWrapper() {
   return (
@@ -89,6 +90,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </main>
       {!shouldHideFooter && <Footer />}

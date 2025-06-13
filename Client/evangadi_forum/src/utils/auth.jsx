@@ -1,15 +1,20 @@
+// src/AuthContext.js
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { baseURL } from "./api";
 
-const AuthContext = createContext({
-  isAuthenticated: false,
-  user: null,
-  isLoading: true,
-  login: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext({});
+
+// Validate JWT expiration
+function validateToken(token) {
+  if (!token) return false;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.exp > Date.now() / 1000;
+  } catch (error) {
+    return false;
+  }
+}
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -17,46 +22,25 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const validateToken = (token) => {
-    if (!token) return false;
+  const fetchUserData = async () => {
     try {
-      const decoded = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      return decoded.exp > currentTime;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const fetchUserData = async (token) => {
-    try {
-      const response = await baseURL.get("/api/auth/checkUser", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await baseURL.get("/api/auth/checkUser"); 
       setUser(response.data);
       setIsAuthenticated(true);
-      return true;
     } catch (err) {
-      console.error("Fetch user error:", err);
-      return false;
+      console.error("Fetching user failed:", err);
+      setUser(null);
+      setIsAuthenticated(false);
     }
   };
 
   const login = async (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
-    const isValid = validateToken(newToken);
-
-    if (isValid) {
-      const success = await fetchUserData(newToken);
-      if (!success) {
-        logout();
-        return false;
-      }
-      return true;
+    if (validateToken(newToken)) {
+      await fetchUserData();
     } else {
       logout();
-      return false;
     }
   };
 
@@ -68,28 +52,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
+    (async () => {
       setIsLoading(true);
       if (token && validateToken(token)) {
-        await fetchUserData(token);
+        await fetchUserData();
       } else {
         logout();
       }
       setIsLoading(false);
-    };
-
-    initializeAuth();
-  }, [token]);
+    })();
+  }, []);
 
   return (
     <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        user,
-        isLoading,
-        login,
-        logout,
-      }}
+      value={{ isAuthenticated, user, isLoading, login, logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
 
@@ -35,11 +34,7 @@ const SignIn = () => {
       // Call login and wait for it to complete
       const loginSuccess = await login(response.data.token);
 
-      if (loginSuccess) {
-        navigate("/", { replace: true });
-      } else {
-        setError("Authentication failed. Please try again.");
-      }
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
       setError(
@@ -51,45 +46,28 @@ const SignIn = () => {
       setIsLoading(false);
     }
   };
-
   return (
-    <div className="p-3">
+    <div className="">
       <div className="text-center mb-4">
-        <h2 className="text-center mb-3">Join the network</h2>
-        <p className="text-center mb-5">
+        <h2>Login to your account</h2>
+        <p>
           Don't have an account?{" "}
-          <NavLink
-            className="auth-link"
-            to="/auth?tab=signup"
-            style={{ color: "#f28c38", textDecoration: "none" }}
-          >
+          <NavLink to="/auth?tab=signup" style={{ color: "#f28c38" }}>
             Create a new account
           </NavLink>
         </p>
       </div>
-
-      {error && (
-        <div className="alert alert-danger alert-dismissible fade show">
-          {error}
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setError("")}
-          ></button>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit}>
         <div className="mb-3 position-relative">
           <div className="input-group">
             <input
               type="email"
-              className="form-control"
+              className="form-control form-input"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Email"
+              placeholder="Email address"
               required
             />
           </div>
@@ -99,7 +77,7 @@ const SignIn = () => {
           <div className="input-group">
             <input
               type="password"
-              className="form-control"
+              className="form-control form-input"
               id="password"
               name="password"
               value={formData.password}
@@ -115,6 +93,7 @@ const SignIn = () => {
           <NavLink
             to="/forgot-password"
             className="text-decoration-none auth-link"
+            style={{ color: "#f28c38" }}
           >
             Forgot password?
           </NavLink>

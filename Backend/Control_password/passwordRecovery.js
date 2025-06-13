@@ -76,7 +76,7 @@ export const resetPassword = async (req, res) => {
         "SELECT * FROM usertable WHERE reset_token = ? AND reset_token_expiry > NOW()",
         [token]
       );
-
+ 
     if (users.length === 0) {
       return res.status(400).json({ error: "Invalid or expired token." });
     }
