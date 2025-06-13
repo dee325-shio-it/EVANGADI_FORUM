@@ -431,6 +431,7 @@ body {
   font-size: 14px;
 }
 .form-input:focus,
+.form-input:not(:placeholder-shown),
 .form-input:active {
   background-color: #e6f0fe !important; /* change this to whatever color you like */
   outline: none !important;
