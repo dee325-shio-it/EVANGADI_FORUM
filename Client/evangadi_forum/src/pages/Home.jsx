@@ -51,20 +51,17 @@ const Home = () => {
   return (
     <div className="container-fluid py-4">
       <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
+        <div className="col-md-11 col-lg-9">
           {isAuthenticated && (
-            <div className="d-flex justify-content-end mb-4">
-              <Link to="/ask" className="btn btn-primary">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <Link to="/ask" className="home-ask-btn">
                 Ask Question
               </Link>
+              <h4 className="mb-0">Welcome, {user?.firstname}</h4>
             </div>
           )}
 
           <div className="d-flex flex-column gap-3">
-            <div className="p-3 bg-light rounded">
-              <h4>Welcome, {user?.firstname}</h4>
-            </div>
-
             <div className="card">
               <div className="card-header bg-white">
                 <h2 className="mb-0">Questions</h2>
