@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 // Import routes
 import authRoutes from "./Routes/signUp_login.js";
-import questionRoutes from "./Routes/getQuestions.js";
+import questionRoutes from "./Routes/questionsAPI.js";
 import answerRoutes from "./Routes/answersAPI.js";
 import contentRoutes from "./Routes/getContent.js"; // Editing and deleting question and answers
 
