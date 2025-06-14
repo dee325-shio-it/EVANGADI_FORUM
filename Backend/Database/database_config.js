@@ -22,7 +22,7 @@ const dbConnection = mysql2.createPool({
 	user: process.env.DB_USER || "root",
 	password: process.env.DB_PASSWORD || "root",
 	database: process.env.DB_NAME || "evangadi_forum",
-	// port: parseInt(process.env.DB_PORT, 10) || 8889,
+	port: process.env.DB_PORT || 8889,
 	connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT, 10) || 10, // Max concurrent connections
 	queueLimit: parseInt(process.env.DB_QUEUE_LIMIT, 10) || 0, // Unlimited queue (0)
 	waitForConnections: true, // Wait for available connections
@@ -72,6 +72,10 @@ CREATE TABLE IF NOT EXISTS userTable (
     password VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE userTable
+ADD COLUMN reset_token TEXT,
+ADD COLUMN reset_token_expiry INT;
 
 -- QUESTIONS TABLE
 CREATE TABLE IF NOT EXISTS questionTable (

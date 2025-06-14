@@ -6,9 +6,9 @@ import dotenv from "dotenv";
 
 // Import routes
 import authRoutes from "./Routes/signUp_login.js";
-// import questionRoutes from "./Routes/getQuestions.js";
-// import answerRoutes from "./Routes/answersAPI.js";
-// import contentRoutes from "./Routes/getContent.js"; // Editing and deleting question and answers
+//import questionRoutes from "./Routes/getQuestions.js";
+//import answerRoutes from "./Routes/answersAPI.js";
+//import contentRoutes from "./Routes/getContent.js"; // Editing and deleting question and answers
 
 // Load environment variables
 dotenv.config();
@@ -49,9 +49,9 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/question", questionRoutes);
-// app.use("/api/answer", answerRoutes);
-// app.use("/api/content", contentRoutes);
+//app.use("/api/question", questionRoutes);
+//app.use("/api/answer", answerRoutes);
+//app.use("/api/content", contentRoutes);
 
 // ==============================================
 // ERROR HANDLING
