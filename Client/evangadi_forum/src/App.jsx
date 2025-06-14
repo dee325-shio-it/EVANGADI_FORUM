@@ -13,6 +13,7 @@ import Ask from "./pages/Ask";
 import "./index.css";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import About from "./pages/About"
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="question/:questionid" element={<Question />} />
               <Route path="ask" element={<Ask />} />
             </Route>
+          <Route path="/about" element={<About />} />
             <Route path="/auth" element={<AuthPage />} />
           </Routes>
         </main>

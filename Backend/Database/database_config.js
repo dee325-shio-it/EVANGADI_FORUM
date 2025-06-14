@@ -19,8 +19,8 @@ dotenv.config();
  */
 const dbConnection = mysql2.createPool({
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'root',
+    user: process.env.DB_USER || 'root1',
+    password: process.env.DB_PASSWORD || 'root1234end',
     database: process.env.DB_NAME || 'evangadi_forum',
     port: parseInt(process.env.DB_PORT, 10) || 8889,
     connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT, 10) || 10, // Max concurrent connections

@@ -4,7 +4,7 @@
  */
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/auth";
-import logoB from "./logoBlack.png";
+import logoB from "./images/logoBlack.png";
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();

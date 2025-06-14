@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
+// import "./SignIn.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -26,15 +26,11 @@ const SignIn = () => {
 
     try {
       const response = await baseURL.post("/api/auth/login", formData);
-
-      // Ensure the response contains a token
       if (!response.data?.token) {
         throw new Error("No token received");
       }
 
-      // Call login and wait for it to complete
       const loginSuccess = await login(response.data.token);
-
       if (loginSuccess) {
         navigate("/", { replace: true });
       } else {
@@ -53,35 +49,31 @@ const SignIn = () => {
   };
 
   return (
-    <div className="p-3">
-      <div className="text-center mb-4">
-        <h2 className="text-center mb-3">Join the network</h2>
-        <p className="text-center mb-5">
-          Don't have an account?{" "}
-          <NavLink
-            className="auth-link"
-            to="/auth?tab=signup"
-            style={{ color: "#f28c38", textDecoration: "none" }}
-          >
-            Create a new account
-          </NavLink>
-        </p>
-      </div>
-
-      {error && (
-        <div className="alert alert-danger alert-dismissible fade show">
-          {error}
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setError("")}
-          ></button>
+    <div className="sign_in_sign_up_background signin-container">
+      <div className="signin-box">
+        <div className="text-center mb-4">
+          <h2 className="text-center mb-3">Login to your account</h2>
+          <p className="text-center mb-4">
+            Don't have an account?{" "}
+            <NavLink className="auth-link" to="/auth?tab=signup">
+              Create a new account
+            </NavLink>
+          </p>
         </div>
-      )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3 position-relative">
-          <div className="input-group">
+        {error && (
+          <div className="alert alert-danger alert-dismissible fade show">
+            {error}
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setError("")}
+            ></button>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
             <input
               type="email"
               className="form-control"
@@ -89,14 +81,12 @@ const SignIn = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Email"
+              placeholder="Email address"
               required
             />
           </div>
-        </div>
 
-        <div className="mb-3 position-relative">
-          <div className="input-group">
+          <div className="mb-3">
             <input
               type="password"
               className="form-control"
@@ -108,38 +98,57 @@ const SignIn = () => {
               required
             />
           </div>
-        </div>
 
-        <div className="d-flex justify-content-between mb-3">
-          <div className="form-check"></div>
-          <NavLink
-            to="/forgot-password"
-            className="text-decoration-none auth-link"
+          <div className="d-flex justify-content-end mb-3">
+            <NavLink
+              to="/forgot-password"
+              className="text-decoration-none auth-link"
+            >
+              Forgot password?
+            </NavLink>
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            disabled={isLoading}
           >
-            Forgot password?
-          </NavLink>
-        </div>
+            {isLoading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Signing in...
+              </>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
+      </div>
 
-        <button
-          type="submit"
-          className="btn btn-primary w-100 py-2 mb-3"
-          style={{ backgroundColor: "#5069F0" }}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              Signing in...
-            </>
-          ) : (
-            "Sign In"
-          )}
-        </button>
-      </form>
+      <div className="info-box">
+        <Link className="about-label" to="/about">
+          About
+        </Link>
+        <h2 className="evangadi-title">Evangadi Networks</h2>
+        <p className="info-text">
+          No matter what stage of life you are in, whether you're just starting
+          elementary school or being promoted to CEO of a Fortune 500 company,
+          you have much to offer to those who are trying to follow in your
+          footsteps.
+        </p>
+        <p className="info-text">
+          Whether you are willing to share your knowledge or you are just
+          looking to meet mentors of your own, please start by joining the
+          network here.
+        </p>
+        <Link button className="how-it-works-btn" to="/about">
+          HOW IT WORKS
+        </Link>
+      </div>
     </div>
   );
 };
