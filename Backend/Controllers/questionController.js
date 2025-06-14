@@ -1,11 +1,11 @@
 // ==================== Routes/questionRoutes.js ====================
-import express from "express";
-import { v4 as uuidv4 } from "uuid";
+// import express from "express";
+// import { v4 as uuidv4 } from "uuid";
 // import dbConnection from "../Database/database_config.js";
 // import { checkLogin } from "../Middleware/middleware.js";
 
 
-const router = express.Router();
+// const router = express.Router();
 
 
 // /**
@@ -83,9 +83,17 @@ const router = express.Router();
 // export default router;
 // Controllers/questionController.js
 
-import dbConnection from "../Database/database_config.js";
 
-export async function getAllQuestions(req, res) {
+
+import express from "express";
+import { v4 as uuidv4 } from "uuid";
+import dbConnection from "../Database/database_config.js";
+import { checkLogin } from "../Middleware/middleware.js";
+
+const router = express.Router();
+
+// Get all questions
+router.get("/", async (req, res) => {
   try {
     const [questions] = await dbConnection
       .promise()
@@ -97,9 +105,10 @@ export async function getAllQuestions(req, res) {
     console.error("Get questions error:", error);
     res.status(500).json({ error: "Couldn't get questions" });
   }
-}
+});
 
-export async function getSingleQuestion(req, res) {
+// Get single question
+router.get("/:questionid", async (req, res) => {
   try {
     const { questionid } = req.params;
     const [questions] = await dbConnection
@@ -112,15 +121,15 @@ export async function getSingleQuestion(req, res) {
     if (questions.length === 0) {
       return res.status(404).json({ error: "Question not found" });
     }
-
     res.json(questions[0]);
   } catch (error) {
     console.error("Get question error:", error);
     res.status(500).json({ error: "Couldn't get question" });
   }
-}
+});
 
-export async function postQuestion(req, res) {
+// Post new question (protected)
+router.post("/", checkLogin, async (req, res) => {
   try {
     const { title, description, tag } = req.body;
     const userid = req.user.userid;
@@ -142,4 +151,6 @@ export async function postQuestion(req, res) {
     console.error("Post question error:", error);
     res.status(500).json({ error: "Couldn't post question" });
   }
-}
+});
+
+export default router;
