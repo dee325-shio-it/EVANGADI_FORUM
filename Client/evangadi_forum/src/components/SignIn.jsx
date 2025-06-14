@@ -1,3 +1,5 @@
+// Sigin.jsx
+
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../utils/auth";
@@ -25,7 +27,7 @@ const SignIn = () => {
 
     try {
       const response = await baseURL.post("/api/auth/login", formData);
-
+      console.log(response);
       // Ensure the response contains a token
       if (!response.data?.token) {
         throw new Error("No token received");
@@ -57,6 +59,13 @@ const SignIn = () => {
           </NavLink>
         </p>
       </div>
+
+      {error && (
+        <div className="alert alert-danger text-center" role="alert">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div className="mb-3 position-relative">
           <div className="input-group">

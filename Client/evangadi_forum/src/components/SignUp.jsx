@@ -5,6 +5,7 @@ import { baseURL } from "../utils/api";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     firstName: "",
+    username: "",
     lastName: "",
     email: "",
     password: "",
@@ -38,6 +39,7 @@ const SignUp = () => {
 
     try {
       await baseURL.post("/api/auth/register", {
+        username: formData.username,
         firstname: formData.firstName,
         lastname: formData.lastName,
         email: formData.email,
