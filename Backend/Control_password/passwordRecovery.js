@@ -33,7 +33,7 @@ export const forgotPassword = async (req, res) => {
     // Step 3: Generate secure token and expiry (1 hour from now)
     const token = generateToken();
     const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-
+   
     // Step 4: Store token and expiry in the user's record
     await dbConnection
       .promise()
