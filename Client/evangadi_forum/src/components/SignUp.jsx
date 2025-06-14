@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { baseURL } from "../utils/api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
+    username: "", // ✅ Include username in state
     firstName: "",
     lastName: "",
     email: "",
@@ -18,30 +19,31 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password
-    ) {
+
+    // Simple client-side validation
+    const { username, firstName, lastName, email, password } = formData;
+    if (!username || !firstName || !lastName || !email || !password) {
       setError("All fields are required");
       return;
     }
-    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+
+    if (!email.includes("@") || !email.includes(".")) {
       setError("Invalid email format");
       return;
     }
-    if (formData.password.length < 8) {
+
+    if (password.length < 8) {
       setError("Password must be at least 8 characters");
       return;
     }
 
     try {
       await baseURL.post("/api/auth/register", {
-        firstname: formData.firstName,
-        lastname: formData.lastName,
-        email: formData.email,
-        password: formData.password,
+        username,
+        firstname: firstName,
+        lastname: lastName,
+        email,
+        password,
       });
       navigate("/auth?tab=login");
     } catch (err) {
@@ -60,7 +62,9 @@ const SignUp = () => {
           </NavLink>
         </p>
       </div>
+
       {error && <div className="alert alert-danger">{error}</div>}
+
       <form onSubmit={handleSubmit} className="auth-form">
         {/* Username Field */}
         <div className="mb-3">
@@ -75,7 +79,7 @@ const SignUp = () => {
           />
         </div>
 
-        {/* Name Fields - Side by Side on larger screens */}
+        {/* Name Fields */}
         <div className="row mb-3">
           <div className="col-md-6 mb-3 mb-md-0">
             <input
@@ -106,7 +110,7 @@ const SignUp = () => {
           <input
             type="email"
             className="form-control form-input"
-            placeholder="Email address"
+            placeholder="Email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -127,28 +131,47 @@ const SignUp = () => {
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Terms Text */}
         <h6 className="my-3 text-center" style={{ fontSize: "10px" }}>
           I agree to the{" "}
-          <NavLink style={{ color: "#f28c38" }}>privacy policy</NavLink> and{" "}
-          <NavLink style={{ color: "#f28c38" }}>terms of services</NavLink>
+          <NavLink to="#" className="auth-link">
+            privacy policy
+          </NavLink>{" "}
+          and{" "}
+          <NavLink to="#" className="auth-link">
+            terms of service
+          </NavLink>
         </h6>
-        <button
-          type="submit"
-          className="btn btn-primary w-100 auth-button"
-          style={{ backgroundColor: "#5069F0", color: "" }}
-        >
+
+        <button type="submit" className="btn btn-primary w-100 auth-button">
           Agree and Join
         </button>
       </form>
-      <p className="text-center mt-2">
-        <NavLink
-          to="/auth?tab=login"
-          style={{ color: "#f28c38", textDecoration: "none" }}
+
+      {/* Info Box */}
+      <div className="info-box mt-5 text-center">
+        <Link className="about-label" to="/about">
+          About
+        </Link>
+        <h2 className="evangadi-title">Evangadi Networks</h2>
+        <p className="info-text">
+          No matter what stage of life you are in, whether you're just starting
+          elementary school or being promoted to CEO of a Fortune 500 company,
+          you have much to offer to those who are trying to follow in your
+          footsteps.
+        </p>
+        <p className="info-text">
+          Whether you are willing to share your knowledge or you are just
+          looking to meet mentors of your own, please start by joining the
+          network here.
+        </p>
+        <Link
+          className="how-it-works-btn btn btn-outline-primary mt-2"
+          to="/about"
         >
-          Already have an account?
-        </NavLink>
-      </p>
+          HOW IT WORKS
+        </Link>
+      </div>
     </div>
   );
 };

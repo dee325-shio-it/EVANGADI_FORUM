@@ -1,74 +1,80 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import "./about.css"
 
-function About() {
+/**
+ * About – Evangadi Forum
+ */
+const About = () => {
   return (
-    <div className="container mt-5 p-5 bg-light rounded shadow">
-      <h1 className="mb-4 text-center fw-bold">How Our Forum Works</h1>
-      <p className="lead text-center mb-5">
-        Join our community, learn from questions, answers, and contribute back!
-        Here’s a simple step-by-step guide to get you started.
-      </p>
+    <main className="about-container">
+      {/* === Left: About Section === */}
+      <section className="about-section">
+        <p className="about-label">About</p>
+        <h2 className="evangadi-title">Evangadi Networks</h2>
 
-      <ul className="list-group mb-5">
-        <li className="list-group-item d-flex align-items-center mb-3 p-3 shadow-sm">
-          <i className="bi bi-box-arrow-in-right fs-4 me-3 text-primary"></i>
-          <div>
-            <strong>Login or Signup</strong> — If you already have an account,{" "}
-            <Link style={{textDecoration:"none"}} to="/auth?tab=signin" className="link-primary fw-semibold">
-              log in
-            </Link>
-            . Otherwise,{" "}
-            <Link style={{textDecoration:"none"}} to="/auth?tab=signup" className="link-primary fw-semibold">
-              sign up
-            </Link>{" "}
-            in seconds.
-          </div>
-        </li>
-        <li className="list-group-item d-flex align-items-center mb-3 p-3 shadow-sm">
-          <i className="bi bi-list-ul fs-4 me-3 text-warning"></i>
-          <div>
-            <strong>View All Questions</strong> — Once you’re in, you’ll find a
-            curated list of questions from the community on the Home page.
-          </div>
-        </li>
-        <li className="list-group-item d-flex align-items-center mb-3 p-3 shadow-sm">
-          <i className="bi bi-eye fs-4 me-3 text-info"></i>
-          <div>
-            <strong>Click Question Title to View</strong> — See all answers,
-            vote, or add your own answer directly on the question page.
-          </div>
-        </li>
-        <li className="list-group-item d-flex align-items-center mb-3 p-3 shadow-sm">
-          <i className="bi bi-question-circle fs-4 me-3 text-success"></i>
-          <div>
-            <strong>Ask Your Question</strong> — To start a new thread, click{" "}
-            <Link style={{textDecoration:"none"}} to="/" className="badge bg-primary p-2">Ask Question</Link> on the
-            Home page. You need to be a registered user.
-          </div>
-        </li>
-        <li className="list-group-item d-flex align-items-center mb-3 p-3 shadow-sm">
-          <i className="bi bi-pencil-square fs-4 me-3 text-secondary"></i>
-          <div>
-            <strong>Edit or Delete</strong> — If you’re the author of a question
-            or answer, you can edit or delete it at any time.
-          </div>
-        </li>
-      </ul>
+        <p className="info-text">
+          Evangadi Forum is a collaborative platform where users can ask
+          questions, share knowledge, and receive guidance from mentors and
+          peers. Whether you're a beginner or a professional, there's a place
+          for you to learn and contribute.
+        </p>
+        <p className="info-text">
+          To use the platform, you need to <strong>log in</strong> or{" "}
+          <strong>sign up</strong> if you haven't already. After logging in, you
+          can ask questions, get answers, and access all your posted content
+          through your profile.
+        </p>
 
-      <div className="alert alert-info p-3 shadow" role="alert">
-        <i className="bi bi-lightbulb-fill me-2 text-warning fs-4 align-middle"></i>
-        <strong>Tip:</strong> Keep conversations constructive and respectful.
-        Your knowledge makes this community great! 🌟
-      </div>
+        <div className="cta-group">
+          <NavLink to="/auth?tab=signup" className="btn-orange cta-btn">
+            Sign-Up
+          </NavLink>
+          <NavLink to="/auth?tab=login" className="btn-orange cta-btn">
+            Log-In
+          </NavLink>
+        </div>
+      </section>
 
-      <div className="text-center mt-4">
-        <Link style={{textDecoration:"none"}} to="/auth?tab=signup" className="btn btn-primary btn-lg px-4 py-2 shadow">
-          Get Started Now
-        </Link>
-      </div>
-    </div>
+      {/* === Right: How It Works Steps === */}
+      <section className="about-steps">
+        <h3 className="steps-heading">How It Works</h3>
+        <ol className="steps-list">
+          <li>
+            <span className="step-icon">1</span>
+            <div className="step-text">
+              Create an account or log in to your existing profile.
+            </div>
+          </li>
+          <li>
+            <span className="step-icon">2</span>
+            <div className="step-text">
+              Click on <em>Post Question</em> and write your question title.
+            </div>
+          </li>
+          <li>
+            <span className="step-icon">3</span>
+            <div className="step-text">
+              Add details about your question, including what you’ve tried.
+            </div>
+          </li>
+          <li>
+            <span className="step-icon">4</span>
+            <div className="step-text">
+              Submit your question. Community members will respond with answers.
+            </div>
+          </li>
+          <li>
+            <span className="step-icon">5</span>
+            <div className="step-text">
+              Revisit your profile to see your questions and answers at any
+              time.
+            </div>
+          </li>
+        </ol>
+      </section>
+    </main>
   );
-}
+};
 
 export default About;
