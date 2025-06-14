@@ -1,13 +1,9 @@
 import { useState } from "react";
-
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { baseURL } from "../utils/api";
-import { useAuth } from "../utils/auth";
-// import "./Auth.css";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    username: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -24,7 +20,6 @@ const SignUp = () => {
     e.preventDefault();
 
     if (
-      !formData.username ||
       !formData.firstName ||
       !formData.lastName ||
       !formData.email ||
@@ -46,7 +41,6 @@ const SignUp = () => {
 
     try {
       await baseURL.post("/api/auth/register", {
-        username: formData.username,
         firstname: formData.firstName,
         lastname: formData.lastName,
         email: formData.email,
@@ -59,57 +53,56 @@ const SignUp = () => {
   };
 
   return (
-    // <div className=" sign_up main-container">
-    <div className="sign_up_page sign_in_sign_up_background">
-      {/* Sign-up Form Section */}
-      <div className="card">
-        <h2 className="text-center mb-3">Join the network</h2>
-        <p className="text-center mb-4">
+    <div className="">
+      <div className="text-center mb-4">
+        <h2>Join the network</h2>
+        <p>
           Already have an account?{" "}
-          <NavLink className="auth-link" to="/auth?tab=login">
+          <NavLink to="/auth?tab=login" style={{ color: "#f28c38" }}>
             Sign in
           </NavLink>
         </p>
+      </div>
+      {error && <div className="alert alert-danger">{error}</div>}
+      <form onSubmit={handleSubmit} className="auth-form">
+        {/* Username Field */}
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control form-input"
+            placeholder="Username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="mb-3">
+        {/* Name Fields - Side by Side on larger screens */}
+        <div className="row mb-3">
+          <div className="col-md-6 mb-3 mb-md-0">
             <input
               type="text"
               className="form-control form-input"
-              placeholder="Username"
-              name="username"
-              value={formData.username}
+              placeholder="First Name"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
               required
             />
           </div>
-
-          <div className="row mb-3">
-            <div className="col-md-6 mb-3 mb-md-0">
-              <input
-                type="text"
-                className="form-control form-input"
-                placeholder="First Name"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                type="text"
-                className="form-control form-input"
-                placeholder="Last Name"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          <div className="col-md-6">
+            <input
+              type="text"
+              className="form-control form-input"
+              placeholder="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
           </div>
+        </div>
 
           <div className="mb-3">
             <input
@@ -123,17 +116,18 @@ const SignUp = () => {
             />
           </div>
 
-          <div className="mb-4">
-            <input
-              type="password"
-              className="form-control form-input"
-              placeholder="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        {/* Password Field */}
+        <div className="mb-4">
+          <input
+            type="password"
+            className="form-control form-input"
+            placeholder="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
           <h6 className="my-3 text-center" style={{ fontSize: "10px" }}>
             I agree to the{" "}

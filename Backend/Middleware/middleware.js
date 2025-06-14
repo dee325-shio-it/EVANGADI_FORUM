@@ -1,4 +1,4 @@
-import {makeToken,tokenVerfier} from "../TokenGenerator/JWT.js";
+import {tokenVerfier} from "../TokenGenerator/JWT.js";
 import dbConnection from "../Database/database_config.js";
 import dotenv from "dotenv";
 

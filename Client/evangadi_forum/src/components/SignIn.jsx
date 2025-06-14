@@ -30,12 +30,8 @@ const SignIn = () => {
         throw new Error("No token received");
       }
 
-      const loginSuccess = await login(response.data.token);
-      if (loginSuccess) {
-        navigate("/", { replace: true });
-      } else {
-        setError("Authentication failed. Please try again.");
-      }
+      await login(response.data.token);
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
       setError(
@@ -49,34 +45,23 @@ const SignIn = () => {
   };
 
   return (
-    <div className="sign_in_sign_up_background signin-container">
-      <div className="signin-box">
-        <div className="text-center mb-4">
-          <h2 className="text-center mb-3">Login to your account</h2>
-          <p className="text-center mb-4">
-            Don't have an account?{" "}
-            <NavLink className="auth-link" to="/auth?tab=signup">
-              Create a new account
-            </NavLink>
-          </p>
-        </div>
+    <div className="">
+      <div className="text-center mb-4">
+        <h2>Login to your account</h2>
+        <p>
+          Don't have an account?{" "}
+          <NavLink to="/auth?tab=signup" style={{ color: "#f28c38" }}>
+            Create a new account
+          </NavLink>
+        </p>
+      </div>
 
-        {error && (
-          <div className="alert alert-danger alert-dismissible fade show">
-            {error}
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setError("")}
-            ></button>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3 position-relative">
+          <div className="input-group">
             <input
               type="email"
-              className="form-control"
+              className="form-control form-input"
               id="email"
               name="email"
               value={formData.email}
@@ -85,51 +70,55 @@ const SignIn = () => {
               required
             />
           </div>
+        </div>
 
-          <div className="mb-3">
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
-            />
-          </div>
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control form-input"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
+        </div>
 
-          <div className="d-flex justify-content-end mb-3">
-            <NavLink
-              to="/forgot-password"
-              className="text-decoration-none auth-link"
-            >
-              Forgot password?
-            </NavLink>
-          </div>
+        {error && <div className="alert alert-danger">{error}</div>}
 
-          <button
-            type="submit"
-            className="btn btn-primary w-100"
-            disabled={isLoading}
+        <div className="d-flex justify-content-between mb-3">
+          <div className="form-check"></div>
+          <NavLink
+            to="/forgot-password"
+            className="text-decoration-none auth-link"
+            style={{ color: "#f28c38" }}
           >
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Signing in...
-              </>
-            ) : (
-              "Login"
-            )}
-          </button>
-        </form>
-      </div>
+            Forgot password?
+          </NavLink>
+        </div>
 
-      <div className="info-box">
+        <button
+          type="submit"
+          className="btn btn-primary w-100"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Signing in...
+            </>
+          ) : (
+            "Login"
+          )}
+        </button>
+      </form>
+
+      <div className="info-box mt-5 text-center">
         <Link className="about-label" to="/about">
           About
         </Link>
@@ -145,7 +134,10 @@ const SignIn = () => {
           looking to meet mentors of your own, please start by joining the
           network here.
         </p>
-        <Link button className="how-it-works-btn" to="/about">
+        <Link
+          className="how-it-works-btn btn btn-outline-primary mt-2"
+          to="/about"
+        >
           HOW IT WORKS
         </Link>
       </div>
