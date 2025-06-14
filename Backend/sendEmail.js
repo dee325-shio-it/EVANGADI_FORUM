@@ -5,7 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendResetEmail = async (to, token) => {
   const resetUrl = `${process.env.SENDER_URL}/reset-password/${token}`;
-  console.log(resetUrl);
+  // console.log(resetUrl);
   const msg = {
     to: to,
     from: `${process.env.SENDER_EMAIL}`,
@@ -17,7 +17,7 @@ export const sendResetEmail = async (to, token) => {
       <p>This link will expire in 1 hour.</p>
     `,
   };
-
+  console.log(msg);
   try {
     await sgMail.send(msg);
     console.log("Reset email sent to:", to);

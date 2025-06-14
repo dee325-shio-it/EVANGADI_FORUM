@@ -30,7 +30,9 @@ const SignIn = () => {
         throw new Error("No token received");
       }
 
+      // Call login and wait for it to complete
       await login(response.data.token);
+
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
