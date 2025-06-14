@@ -8,7 +8,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa6";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaLinkedin } from "react-icons/fa6";
-import "./Footer.css";
+// import "./Footer.css";
 const Footer = () => {
 	return (
 		<footer className="footer">
