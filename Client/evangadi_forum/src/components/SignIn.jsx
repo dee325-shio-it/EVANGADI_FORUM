@@ -32,7 +32,7 @@ const SignIn = () => {
       }
 
       // Call login and wait for it to complete
-      const loginSuccess = await login(response.data.token);
+      await login(response.data.token);
 
       navigate("/", { replace: true });
     } catch (err) {

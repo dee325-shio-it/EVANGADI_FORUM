@@ -355,6 +355,12 @@ body {
 
 /* Auth Page Layout */
 .auth-page {
+  background-image: url(/Evangadibackground.svg);
+  background-size: contain; /* instead of cover, to show whole SVG */
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
 }
