@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS userTable (
 
 ALTER TABLE userTable
 ADD COLUMN reset_token TEXT,
-ADD COLUMN reset_token_expiry BINT;
+ADD COLUMN reset_token_expiry BIGINT;
 
 -- QUESTIONS TABLE
 CREATE TABLE IF NOT EXISTS questionTable (
