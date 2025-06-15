@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { baseURL } from "../utils/api";
+import { format } from "date-fns";
 
 /**
  * Fetches and displays all questions from /api/question, redirects unauthenticated users
@@ -88,6 +89,15 @@ const Home = () => {
                             </Link>
                             <small className="text-muted">
                               Posted by: {q.username}
+                            </small>
+                            <small
+                              className="text-muted"
+                              style={{ paddingLeft: "0px", fontSize: "10px" }}
+                            >
+                              {format(
+                                new Date(q.created_at),
+                                "MMM d, yyyy, hh:mm a"
+                              )}
                             </small>
                           </div>
                         </div>

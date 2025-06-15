@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { baseURL } from "../utils/api";
 import { useAuth } from "../utils/auth";
+import { format } from "date-fns";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import * as bootstrap from "bootstrap";
 
@@ -232,6 +233,12 @@ const Question = () => {
           <h1 className="card-title">{question.title}</h1>
           <p className="card-text">{question.description}</p>
           <footer className="text-muted">Posted by {question.username}</footer>
+          <small
+            className="text-muted"
+            style={{ paddingLeft: "0px", fontSize: "10px" }}
+          >
+            {format(new Date(question.created_at), "MMM d, yyyy, hh:mm a")}
+          </small>
 
           {user?.userid === question.userid && (
             <div className="mt-3">
@@ -269,6 +276,12 @@ const Question = () => {
                 <p className="mb-1">{answer.answer}</p>
                 <small className="text-muted">
                   Posted by {answer.username}
+                </small>
+                <small
+                  className="text-muted"
+                  style={{ paddingLeft: "10px", fontSize: "10px" }}
+                >
+                  {format(new Date(answer.created_at), "MMM d, yyyy, hh:mm a")}
                 </small>
 
                 {user?.userid === answer.userid && (

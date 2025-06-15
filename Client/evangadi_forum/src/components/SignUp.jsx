@@ -143,35 +143,20 @@ const SignUp = () => {
           </NavLink>
         </h6>
 
-        {/* <button type="submit" className="btn btn-primary w-100 auth-button">
+        <button type="submit" className="btn btn-primary w-100 auth-button">
           Agree and Join
-        </button> */}
+        </button>
+        <div className="text-center mb-4">
+          <NavLink
+            to="/auth?tab=login"
+            style={{ textDecoration: "none", color: "#f28c38" }}
+          >
+            Already have an account?{" "}
+          </NavLink>
+        </div>
       </form>
 
       {/* Info Box */}
-      {/* <div className="info-box mt-5 text-center">
-        <Link className="about-label" to="/about">
-          About
-        </Link>
-        <h2 className="evangadi-title">Evangadi Networks</h2>
-        <p className="info-text">
-          No matter what stage of life you are in, whether you're just starting
-          elementary school or being promoted to CEO of a Fortune 500 company,
-          you have much to offer to those who are trying to follow in your
-          footsteps.
-        </p>
-        <p className="info-text">
-          Whether you are willing to share your knowledge or you are just
-          looking to meet mentors of your own, please start by joining the
-          network here.
-        </p>
-        <Link
-          className="how-it-works-btn btn btn-outline-primary mt-2"
-          to="/about"
-        >
-          HOW IT WORKS
-        </Link>
-      </div> */}
     </div>
   );
 };
