@@ -4,7 +4,6 @@ import { baseURL } from "../utils/api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    username: "", // ✅ Include username in state
     firstName: "",
     username: "",
     lastName: "",
@@ -148,6 +147,14 @@ const SignUp = () => {
           Agree and Join
         </button>
       </form>
+      <p className="text-center mt-2">
+        <NavLink
+          to="/auth?tab=login"
+          style={{ color: "#f28c38", textDecoration: "none" }}
+        >
+          Already have an account?
+        </NavLink>
+      </p>
     </div>
   );
 };

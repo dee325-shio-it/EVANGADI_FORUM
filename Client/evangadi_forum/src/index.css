@@ -166,6 +166,25 @@ body {
   background: #0056d2;
 }
 
+/* Question List Styles */
+.card,
+.list-group {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+}
+
+.list-group-item {
+  border: none !important;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd !important;
+  border-radius: 0 !important;
+}
+
+.list-group-item:last-child {
+  border-bottom: none !important;
+}
+
 .question-list {
   list-style: none;
   padding: 0;
@@ -452,17 +471,18 @@ body {
   padding: 20px 0;
   margin-top: auto;
 }
-
+/* Footer container starts here */
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 0 20px;
 }
 
 .footer-section {
   flex: 1;
+  /* text-align: center; */
 }
 
 .footer-section h3 {
@@ -472,8 +492,8 @@ body {
 
 .footer-section p {
   font-size: 10px;
-  margin: 2px 0;
   color: #91969a;
+  margin: 5px 0;
 }
 .socialLinks {
   display: flex;
@@ -496,7 +516,9 @@ body {
 }
 
 /* Make sure root containers take full height and use flex column layout */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -506,7 +528,7 @@ html, body, #root {
 
 /* main app container that wraps everything */
 .App {
-  flex: 1;               /* Take all remaining vertical space */
+  flex: 1; /* Take all remaining vertical space */
   display: flex;
   flex-direction: column;
 }
@@ -517,6 +539,22 @@ html, body, #root {
   background: var(--bg-dark);
   color: var(--bg-white);
   padding: 20px 0;
+}
+
+.toggle-password-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 8px;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+.toggle-password-btn:hover {
+  color: #e07b30;
 }
 
 /* Responsive Design */
@@ -595,3 +633,4 @@ html, body, #root {
     font-size: 10px;
   }
 }
+/* Ends Here */

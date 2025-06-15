@@ -10,6 +10,8 @@ const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Added
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -26,7 +28,9 @@ const SignIn = () => {
     setIsLoading(true);
     setError("");
 
-
+    try {
+      const response = await baseURL.post("/api/auth/login", formData);
+      console.log(response);
 
       // Call login and wait for it to complete
       await login(response.data.token);
@@ -34,11 +38,9 @@ const SignIn = () => {
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
-      setError(
-        err.response?.data?.error ||
-          err.message ||
-          "Login failed. Please try again."
-      );
+
+      // Show custom message regardless of server response
+      setError("Incorrect email or password.");
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +58,7 @@ const SignIn = () => {
         </p>
       </div>
 
- <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3 position-relative">
           <div className="input-group">
             <input
@@ -72,17 +74,24 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className="mb-3">
+        <div className="mb-4 password-wrapper">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className="form-control form-input"
-            id="password"
+            placeholder="Password"
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Password"
             required
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="toggle-password-btn"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
         </div>
 
         {error && <div className="alert alert-danger">{error}</div>}
@@ -117,7 +126,6 @@ const SignIn = () => {
           )}
         </button>
       </form>
-
     </div>
   );
 };

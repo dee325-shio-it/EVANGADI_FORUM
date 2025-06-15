@@ -36,11 +36,11 @@ const dbConnection = mysql2.createPool({
  * In production, consider logging to a file or monitoring service instead of console.
  */
 dbConnection.execute("SELECT 'test' ", (err, result) => {
-  if (err) {
-    console.error("Database connection test failed:", err.message);
-  } else {
-    console.log("Database connection test successful:", result);
-  }
+	if (err) {
+		console.error("Database connection test failed:", err.message);
+	} else {
+		console.log("Database connection test successful:", result);
+	}
 });
 
 /**
@@ -48,7 +48,7 @@ dbConnection.execute("SELECT 'test' ", (err, result) => {
  * Logs errors to help diagnose issues in production.
  */
 dbConnection.on("error", (err) => {
-  console.error("Database pool error:", err.message);
+	console.error("Database pool error:", err.message);
 });
 
 export default dbConnection;
