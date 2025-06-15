@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./about.css"
+import "./about.css";
 
 /**
  * About – Evangadi Forum

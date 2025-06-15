@@ -143,13 +143,13 @@ const SignUp = () => {
           </NavLink>
         </h6>
 
-        <button type="submit" className="btn btn-primary w-100 auth-button">
+        {/* <button type="submit" className="btn btn-primary w-100 auth-button">
           Agree and Join
-        </button>
+        </button> */}
       </form>
 
-      {/* Info Box */}
-      <div className="info-box mt-5 text-center">
+      Info Box
+      {/* <div className="info-box mt-5 text-center">
         <Link className="about-label" to="/about">
           About
         </Link>
@@ -171,7 +171,7 @@ const SignUp = () => {
         >
           HOW IT WORKS
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };
