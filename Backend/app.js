@@ -6,11 +6,10 @@ import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 
 // Import routes
-// Routes
-import authRoutes from './Routes/signUp_login.js';
-import questionRoutes from './Routes/questionRoutes.js'; 
-import answerRoutes from './Routes/answerRoutes.js';    
-import contentRoutes from './Routes/getContent.js';
+import authRoutes from "./Routes/authenticationRoutes.js";
+import questionRoutes from "./Routes/questionRoutes.js";
+import answerRoutes from "./Routes/answerRoutes.js";
+import contentRoutes from "./Routes/edit_DeleteRoutes.js"; // Editing and deleting question and answers
 
 // Load environment variables
 dotenv.config();
@@ -52,7 +51,7 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/question", questionRoutes);
-app.use("/api/answer", answerRoutes);     
+app.use("/api/answer", answerRoutes);
 app.use("/api/content", contentRoutes);
 
 // ==============================================

@@ -4,7 +4,7 @@ import { baseURL } from "../utils/api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    username: "", // ✅ Include username in state
+    username: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -39,11 +39,11 @@ const SignUp = () => {
 
     try {
       await baseURL.post("/api/auth/register", {
-        username,
-        firstname: firstName,
-        lastname: lastName,
-        email,
-        password,
+        username: formData.username,
+        firstname: formData.firstName,
+        lastname: formData.lastName,
+        email: formData.email,
+        password: formData.password,
       });
       navigate("/auth?tab=login");
     } catch (err) {
@@ -148,7 +148,7 @@ const SignUp = () => {
         </button> */}
       </form>
 
-      Info Box
+      {/* Info Box */}
       {/* <div className="info-box mt-5 text-center">
         <Link className="about-label" to="/about">
           About
