@@ -495,6 +495,30 @@ body {
   font-size: 20px;
 }
 
+/* Make sure root containers take full height and use flex column layout */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* main app container that wraps everything */
+.App {
+  flex: 1;               /* Take all remaining vertical space */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer stays at bottom with margin-top: auto */
+.footer {
+  margin-top: auto;
+  background: var(--bg-dark);
+  color: var(--bg-white);
+  padding: 20px 0;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 1024px) {
   .auth-container {
