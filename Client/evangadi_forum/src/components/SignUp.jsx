@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { baseURL } from "../utils/api";
 
 const SignUp = () => {
@@ -11,10 +11,15 @@ const SignUp = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
@@ -118,17 +123,40 @@ const SignUp = () => {
           />
         </div>
 
-        {/* Password Field */}
-        <div className="mb-4">
+        {/* Password Field with Toggle */}
+        <div className="mb-4 position-relative">
           <input
-            type="password"
-            className="form-control form-input"
+            type={showPassword ? "text" : "password"}
+            className="form-control form-input pe-5"
             placeholder="Password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={togglePasswordVisibility}
+            style={{
+              position: "absolute",
+              color: "gray",
+              right: "2px",
+              fontSize: "15px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 5,
+            }}
+          >
+            {showPassword ? (
+              <i className="bi bi-eye-slash-fill"></i>
+            ) : (
+              <i className="bi bi-eye-fill"></i>
+            )}
+          </button>
         </div>
 
         {/* Terms Text */}
@@ -155,8 +183,6 @@ const SignUp = () => {
           </NavLink>
         </div>
       </form>
-
-      {/* Info Box */}
     </div>
   );
 };

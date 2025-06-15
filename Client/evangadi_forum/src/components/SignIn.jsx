@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
-// import "./SignIn.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -17,6 +17,10 @@ const SignIn = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
@@ -30,9 +34,7 @@ const SignIn = () => {
         throw new Error("No token received");
       }
 
-      // Call login and wait for it to complete
       await login(response.data.token);
-
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
@@ -59,32 +61,55 @@ const SignIn = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <input
+            type="email"
+            className="form-control form-input"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email address"
+            required
+          />
+        </div>
+
         <div className="mb-3 position-relative">
           <div className="input-group">
             <input
-              type="email"
+              type={showPassword ? "text" : "password"}
               className="form-control form-input"
-              id="email"
-              name="email"
-              value={formData.email}
+              id="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
-              placeholder="Email address"
+              placeholder="Password"
               required
             />
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={togglePasswordVisibility}
+              style={{
+                position: "absolute",
+                color: "gray",
+                right: "2px",
+                fontSize: "15px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                zIndex: 5,
+              }}
+            >
+              {showPassword ? (
+                <i className="bi bi-eye-slash-fill"></i>
+              ) : (
+                <i className="bi bi-eye-fill"></i>
+              )}
+            </button>
           </div>
-        </div>
-
-        <div className="mb-3">
-          <input
-            type="password"
-            className="form-control form-input"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
         </div>
 
         {error && <div className="alert alert-danger">{error}</div>}
@@ -119,30 +144,6 @@ const SignIn = () => {
           )}
         </button>
       </form>
-
-      {/* <div className="info-box mt-5 text-center">
-        <Link className="about-label" to="/about">
-          About
-        </Link>
-        <h2 className="evangadi-title">Evangadi Networks</h2>
-        <p className="info-text">
-          No matter what stage of life you are in, whether you're just starting
-          elementary school or being promoted to CEO of a Fortune 500 company,
-          you have much to offer to those who are trying to follow in your
-          footsteps.
-        </p>
-        <p className="info-text">
-          Whether you are willing to share your knowledge or you are just
-          looking to meet mentors of your own, please start by joining the
-          network here.
-        </p>
-        <Link
-          className="how-it-works-btn btn btn-outline-primary mt-2"
-          to="/about"
-        >
-          HOW IT WORKS
-        </Link>
-      </div> */}
     </div>
   );
 };
