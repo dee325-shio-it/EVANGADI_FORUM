@@ -495,15 +495,19 @@ body {
 	color: #91969a;
 	margin: 5px 0;
 }
+.footer-section a{
+	text-decoration: none;
+	color: #91969a;
+}
 .socialLinks {
 	display: flex;
 	/* justify-content: center; */
 	gap: 10px;
 	margin-top: 10px;
-	margin-left: 20px;
+	margin-left: -5px;
 }
 
-.socialLinks span {
+.socialLinks span a {
 	display: flex;
 	align-items: center;
 	justify-content: center;

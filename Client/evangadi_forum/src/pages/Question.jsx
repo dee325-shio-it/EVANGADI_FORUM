@@ -20,7 +20,7 @@ const Question = () => {
   const [editQuestion, setEditQuestion] = useState({
     title: "",
     description: "",
-    tag:"",
+    tag: "",
   });
   const [editAnswer, setEditAnswer] = useState({ answerid: "", answer: "" });
   const [error, setError] = useState("");
@@ -181,12 +181,7 @@ const Question = () => {
             className="btn btn-warning me-2"
             data-bs-toggle="modal"
             data-bs-target="#editQuestionModal"
-            onClick={() =>
-              setEditQuestion({
-                title: question.title,
-                description: question.description,
-              })
-            }
+            onClick={handleEditQuestion}
           >
             Edit Question
           </button>
@@ -211,12 +206,7 @@ const Question = () => {
                     className="btn btn-warning btn-sm me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#editAnswerModal"
-                    onClick={() =>
-                      setEditAnswer({
-                        answerid: answer.answerid,
-                        answer: answer.answer,
-                      })
-                    }
+                    onClick={handleEditAnswer}
                   >
                     Edit
                   </button>

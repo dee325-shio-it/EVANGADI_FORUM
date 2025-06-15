@@ -120,7 +120,7 @@ const SignIn = () => {
         </button>
       </form>
 
-      <div className="info-box mt-5 text-center">
+      {/* <div className="info-box mt-5 text-center">
         <Link className="about-label" to="/about">
           About
         </Link>
@@ -142,7 +142,7 @@ const SignIn = () => {
         >
           HOW IT WORKS
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 
 const AuthPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [showSignUp, setShowSignUp] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,9 @@ const AuthPage = () => {
               follow in your footsteps.
             </p>
             <p className="about-description">
-              Wheather you are willing to share your knowledge or you are just looking to meet mentors of your own, please start by joining the network here.
+              Wheather you are willing to share your knowledge or you are just
+              looking to meet mentors of your own, please start by joining the
+              network here.
             </p>
             <NavLink to="/about" className="how-it-works">
               HOW IT WORKS
