@@ -11,6 +11,7 @@ import {
 
 dotenv.config();
 const router = express.Router();
+
 router.get("/checkUser", checkLogin, async (req, res) => {
   try {
     console.log("Fetching user for userid:", req.user.userid);

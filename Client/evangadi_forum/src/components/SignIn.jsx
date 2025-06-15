@@ -1,9 +1,10 @@
 // Sigin.jsx
 
 import { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
+// import "./SignIn.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -25,13 +26,7 @@ const SignIn = () => {
     setIsLoading(true);
     setError("");
 
-    try {
-      const response = await baseURL.post("/api/auth/login", formData);
-      console.log(response);
-      // Ensure the response contains a token
-      if (!response.data?.token) {
-        throw new Error("No token received");
-      }
+
 
       // Call login and wait for it to complete
       await login(response.data.token);
@@ -48,6 +43,7 @@ const SignIn = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="">
       <div className="text-center mb-4">
@@ -60,13 +56,7 @@ const SignIn = () => {
         </p>
       </div>
 
-      {error && (
-        <div className="alert alert-danger text-center" role="alert">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
+ <form onSubmit={handleSubmit}>
         <div className="mb-3 position-relative">
           <div className="input-group">
             <input
@@ -82,20 +72,20 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className="mb-3 position-relative">
-          <div className="input-group">
-            <input
-              type="password"
-              className="form-control form-input"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
-            />
-          </div>
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control form-input"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
         </div>
+
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="d-flex justify-content-between mb-3">
           <div className="form-check"></div>
@@ -110,8 +100,7 @@ const SignIn = () => {
 
         <button
           type="submit"
-          className="btn btn-primary w-100 py-2 mb-3"
-          style={{ backgroundColor: "#5069F0" }}
+          className="btn btn-primary w-100"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -124,10 +113,11 @@ const SignIn = () => {
               Signing in...
             </>
           ) : (
-            "Sign In"
+            "Login"
           )}
         </button>
       </form>
+
     </div>
   );
 };

@@ -20,6 +20,7 @@ const Question = () => {
   const [editQuestion, setEditQuestion] = useState({
     title: "",
     description: "",
+    tag:"",
   });
   const [editAnswer, setEditAnswer] = useState({ answerid: "", answer: "" });
   const [error, setError] = useState("");
