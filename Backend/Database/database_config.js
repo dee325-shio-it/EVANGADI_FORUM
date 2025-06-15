@@ -18,14 +18,14 @@ dotenv.config();
  * and queueLimit to prevent request pileup.
  */
 const dbConnection = mysql2.createPool({
-	host: process.env.DB_HOST || "localhost",
-	user: process.env.DB_USER || "root",
-	password: process.env.DB_PASSWORD || "root",
-	database: process.env.DB_NAME || "evangadi_forum",
-	port: process.env.DB_PORT || 8889,
-	connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT, 10) || 10, // Max concurrent connections
-	queueLimit: parseInt(process.env.DB_QUEUE_LIMIT, 10) || 0, // Unlimited queue (0)
-	waitForConnections: true, // Wait for available connections
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "root",
+  database: process.env.DB_NAME || "evangadi_forum",
+  //   port: process.env.DB_PORT || 8889,
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT, 10) || 10, // Max concurrent connections
+  queueLimit: parseInt(process.env.DB_QUEUE_LIMIT, 10) || 0, // Unlimited queue (0)
+  waitForConnections: true, // Wait for available connections
 });
 
 /**
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS userTable (
 
 ALTER TABLE userTable
 ADD COLUMN reset_token TEXT,
-ADD COLUMN reset_token_expiry BIGNT;
+ADD COLUMN reset_token_expiry BIGINT;
 
 -- QUESTIONS TABLE
 CREATE TABLE IF NOT EXISTS questionTable (

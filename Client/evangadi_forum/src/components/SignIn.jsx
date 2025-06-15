@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
+// import "./SignIn.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -25,8 +26,6 @@ const SignIn = () => {
 
     try {
       const response = await baseURL.post("/api/auth/login", formData);
-
-      // Ensure the response contains a token
       if (!response.data?.token) {
         throw new Error("No token received");
       }
@@ -46,6 +45,7 @@ const SignIn = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="">
       <div className="text-center mb-4">
@@ -57,6 +57,7 @@ const SignIn = () => {
           </NavLink>
         </p>
       </div>
+
       <form onSubmit={handleSubmit}>
         <div className="mb-3 position-relative">
           <div className="input-group">
@@ -73,20 +74,20 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className="mb-3 position-relative">
-          <div className="input-group">
-            <input
-              type="password"
-              className="form-control form-input"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
-            />
-          </div>
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control form-input"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
         </div>
+
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="d-flex justify-content-between mb-3">
           <div className="form-check"></div>
@@ -101,8 +102,7 @@ const SignIn = () => {
 
         <button
           type="submit"
-          className="btn btn-primary w-100 py-2 mb-3"
-          style={{ backgroundColor: "#5069F0" }}
+          className="btn btn-primary w-100"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -115,10 +115,34 @@ const SignIn = () => {
               Signing in...
             </>
           ) : (
-            "Sign In"
+            "Login"
           )}
         </button>
       </form>
+
+      <div className="info-box mt-5 text-center">
+        <Link className="about-label" to="/about">
+          About
+        </Link>
+        <h2 className="evangadi-title">Evangadi Networks</h2>
+        <p className="info-text">
+          No matter what stage of life you are in, whether you're just starting
+          elementary school or being promoted to CEO of a Fortune 500 company,
+          you have much to offer to those who are trying to follow in your
+          footsteps.
+        </p>
+        <p className="info-text">
+          Whether you are willing to share your knowledge or you are just
+          looking to meet mentors of your own, please start by joining the
+          network here.
+        </p>
+        <Link
+          className="how-it-works-btn btn btn-outline-primary mt-2"
+          to="/about"
+        >
+          HOW IT WORKS
+        </Link>
+      </div>
     </div>
   );
 };
