@@ -17,7 +17,8 @@ const Footer = () => {
           <img src={logoW} alt="logo" style={{ width: "120px" }} />
           <div className="socialLinks">
             <span>
-              <a style={{ textDecoration: "none",color:"white" }}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
                 href="https://www.facebook.com/evangaditech"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -26,7 +27,8 @@ const Footer = () => {
               </a>
             </span>
             <span>
-              <a style={{ textDecoration: "none",color:"white" }}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
                 href="https://www.instagram.com/evangaditech/#"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -35,7 +37,8 @@ const Footer = () => {
               </a>
             </span>
             <span>
-              <a style={{ textDecoration: "none",color:"white" }}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
                 href="https://www.youtube.com/evangaditech"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -44,7 +47,8 @@ const Footer = () => {
               </a>
             </span>
             <span>
-              <a style={{ textDecoration: "none",color:"white" }}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
                 href="https://www.linkedin.com/company/evangaditech"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -68,9 +72,7 @@ const Footer = () => {
         </div>
         <div className="footer-section">
           <h3>Contact Info</h3>
-          <p>
-            <p>Evangadi Networks</p>
-          </p>
+          <p>Evangadi Networks</p>
           <p>
             <a href="mailto:support@evangadi.com">support@evangadi.com</a>
           </p>
