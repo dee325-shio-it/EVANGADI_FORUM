@@ -162,11 +162,11 @@ const SignUp = () => {
         {/* Terms Text */}
         <h6 className="my-3 text-center" style={{ fontSize: "10px" }}>
           I agree to the{" "}
-          <NavLink to="#" className="auth-link">
+          <NavLink to="#" className="auth-link" style={{ color: "#f28c38" }}>
             privacy policy
           </NavLink>{" "}
           and{" "}
-          <NavLink to="#" className="auth-link">
+          <NavLink to="#" className="auth-link" style={{ color: "#f28c38" }}>
             terms of service
           </NavLink>
         </h6>
