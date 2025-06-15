@@ -146,6 +146,14 @@ const SignUp = () => {
         <button type="submit" className="btn btn-primary w-100 auth-button">
           Agree and Join
         </button>
+        <div className="text-center mb-4">
+          <NavLink
+            to="/auth?tab=login"
+            style={{ textDecoration: "none", color: "#f28c38" }}
+          >
+            Already have an account?{" "}
+          </NavLink>
+        </div>
       </form>
       <p className="text-center mt-2">
         <NavLink

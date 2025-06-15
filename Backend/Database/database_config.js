@@ -23,8 +23,6 @@ const dbConnection = mysql2.createPool({
   password: process.env.DB_PASSWORD || "root",
   database: process.env.DB_NAME || "evangadi_forum",
 
-
-
   connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT, 10) || 10, // Max concurrent connections
   queueLimit: parseInt(process.env.DB_QUEUE_LIMIT, 10) || 0, // Unlimited queue (0)
   waitForConnections: true, // Wait for available connections
@@ -36,11 +34,11 @@ const dbConnection = mysql2.createPool({
  * In production, consider logging to a file or monitoring service instead of console.
  */
 dbConnection.execute("SELECT 'test' ", (err, result) => {
-	if (err) {
-		console.error("Database connection test failed:", err.message);
-	} else {
-		console.log("Database connection test successful:", result);
-	}
+  if (err) {
+    console.error("Database connection test failed:", err.message);
+  } else {
+    console.log("Database connection test successful:", result);
+  }
 });
 
 /**
@@ -48,7 +46,7 @@ dbConnection.execute("SELECT 'test' ", (err, result) => {
  * Logs errors to help diagnose issues in production.
  */
 dbConnection.on("error", (err) => {
-	console.error("Database pool error:", err.message);
+  console.error("Database pool error:", err.message);
 });
 
 export default dbConnection;

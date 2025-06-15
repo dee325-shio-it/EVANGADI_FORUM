@@ -1,17 +1,11 @@
-/**
- * Question and Answers page for Evangadi Forum
- * Production Summary: Displays a question's title, description, answers with usernames, allows editing/deleting own content, and posting answers.
- */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { baseURL } from "../utils/api";
 import { useAuth } from "../utils/auth";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { format } from "date-fns";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import * as bootstrap from "bootstrap";
 
-/**
- * Fetches and displays a question and its answers, supports editing/deleting own content and posting answers
- * @returns {JSX.Element} Question and Answers page
- */
 const Question = () => {
   const { questionid } = useParams();
   const [question, setQuestion] = useState(null);
@@ -20,65 +14,70 @@ const Question = () => {
   const [editQuestion, setEditQuestion] = useState({
     title: "",
     description: "",
-    tag:"",
   });
   const [editAnswer, setEditAnswer] = useState({ answerid: "", answer: "" });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+
+  // Fetch question and answers
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const [qResponse, aResponse] = await Promise.all([
+        baseURL.get(`/api/question/${questionid}`),
+        baseURL.get(`/api/answer/${questionid}`).catch((err) => {
+          if (err.response?.status === 404) return { data: { answers: [] } };
+          throw err;
+        }),
+      ]);
+      setQuestion(qResponse.data);
+      setAnswers(aResponse.data.answers || []);
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [questionid]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth?tab=login");
       return;
     }
-
-    const fetchData = async () => {
-      try {
-        const [qResponse, aResponse] = await Promise.all([
-          baseURL.get("/api/question/" + questionid),
-          baseURL.get("/api/answer/" + questionid).catch((err) => {
-            if (err.response?.status === 404) {
-              return { data: { answers: [] } };
-            }
-            throw err;
-          }),
-        ]);
-        setQuestion(qResponse.data);
-        setAnswers(aResponse.data.answers || []);
-      } catch (err) {
-        if (err.response?.status === 401) {
-          logout();
-          navigate("/auth?tab=login");
-        } else {
-          setError("Failed to load question or answers");
-        }
-      }
-    };
     fetchData();
-  }, [questionid, isAuthenticated, navigate, logout]);
+  }, [isAuthenticated, navigate, fetchData]);
+
+  const handleApiError = (err) => {
+    if (err.response?.status === 401) {
+      logout();
+      navigate("/auth?tab=login");
+    } else {
+      setError(
+        err.response?.data?.error || "An error occurred. Please try again."
+      );
+    }
+  };
 
   const handleAnswerSubmit = async (e) => {
     e.preventDefault();
     if (!newAnswer.trim()) {
-      setError("Answer is required");
+      setError("Answer cannot be empty");
       return;
     }
+
     try {
+      setIsSubmitting(true);
       await baseURL.post("/api/answer", { questionid, answer: newAnswer });
       setNewAnswer("");
       setError("");
-      const response = await baseURL
-        .get("/api/answer/" + questionid)
-        .catch((err) => {
-          if (err.response?.status === 404) {
-            return { data: { answers: [] } };
-          }
-          throw err;
-        });
-      setAnswers(response.data.answers || []);
+      await fetchData();
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to post answer");
+      handleApiError(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -88,181 +87,264 @@ const Question = () => {
       setError("Title and description are required");
       return;
     }
+
     try {
-      await baseURL.put(`/api/content/${questionid}`, {
+      setIsSubmitting(true);
+      const response = await baseURL.put(`/api/content/${questionid}`, {
         type: "question",
         title: editQuestion.title,
         description: editQuestion.description,
       });
-      setQuestion({
-        ...question,
-        title: editQuestion.title,
-        description: editQuestion.description,
-      });
-      setEditQuestion({ title: "", description: "" });
-      setError("");
-      document
-        .getElementById("editQuestionModal")
-        .querySelector(".btn-close")
-        .click(); // Close modal
+
+      if (response.data.success) {
+        setQuestion((prev) => ({ ...prev, ...editQuestion }));
+        setError("");
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("editQuestionModal")
+        );
+        if (modal) modal.hide();
+      } else {
+        setError(response.data.error || "Failed to update question");
+      }
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to update question");
+      console.error("Edit error:", err);
+      setError(
+        err.response?.data?.error ||
+          "An error occurred while updating the question"
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleEditAnswer = async (e) => {
     e.preventDefault();
     if (!editAnswer.answer.trim()) {
-      setError("Answer is required");
+      setError("Answer cannot be empty");
       return;
     }
+
     try {
-      await baseURL.put(`/api/content/${editAnswer.answerid}`, {
-        type: "answer",
-        answer: editAnswer.answer,
-      });
-      setAnswers(
-        answers.map((a) =>
-          a.answerid === editAnswer.answerid
-            ? { ...a, answer: editAnswer.answer }
-            : a
-        )
+      setIsSubmitting(true);
+      const response = await baseURL.put(
+        `/api/content/${editAnswer.answerid}`,
+        {
+          type: "answer",
+          answer: editAnswer.answer,
+        }
       );
-      setEditAnswer({ answerid: "", answer: "" });
-      setError("");
-      document
-        .getElementById("editAnswerModal")
-        .querySelector(".btn-close")
-        .click(); // Close modal
+
+      if (response.data.success) {
+        setAnswers((prev) =>
+          prev.map((a) =>
+            a.answerid === editAnswer.answerid
+              ? { ...a, answer: editAnswer.answer }
+              : a
+          )
+        );
+        setError("");
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("editAnswerModal")
+        );
+        if (modal) modal.hide();
+      } else {
+        setError(response.data.error || "Failed to update answer");
+      }
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to update answer");
+      console.error("Edit error:", err);
+      setError(
+        err.response?.data?.error ||
+          "An error occurred while updating the answer"
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleDeleteQuestion = async () => {
-    if (!window.confirm("Are you sure you want to delete this question?"))
+  const handleDelete = async (id, type) => {
+    if (!window.confirm(`Are you sure you want to delete this ${type}?`))
       return;
+
     try {
-      await baseURL.delete(`/api/content/${questionid}`, {
-        params: { type: "question" },
-      });
-      navigate("/"); // Redirect to home after deletion
+      setIsSubmitting(true);
+      await baseURL.delete(`/api/content/${id}`, { params: { type } });
+
+      if (type === "question") {
+        navigate("/");
+      } else {
+        setAnswers((prev) => prev.filter((a) => a.answerid !== id));
+      }
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to delete question");
+      handleApiError(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleDeleteAnswer = async (answerid) => {
-    if (!window.confirm("Are you sure you want to delete this answer?")) return;
-    try {
-      await baseURL.delete(`/api/content/${answerid}`, {
-        params: { type: "answer" },
-      });
-      setAnswers(answers.filter((a) => a.answerid !== answerid));
-      setError("");
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to delete answer");
+  const openEditQuestionModal = () => {
+    setEditQuestion({
+      title: question.title,
+      description: question.description,
+    });
+    const modalElement = document.getElementById("editQuestionModal");
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
     }
   };
 
-  if (!question) return <div className="container mt-4">Loading...</div>;
+  const openEditAnswerModal = (answer) => {
+    setEditAnswer({
+      answerid: answer.answerid,
+      answer: answer.answer,
+    });
+    const modalElement = document.getElementById("editAnswerModal");
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  };
+
+  if (isLoading)
+    return (
+      <div className="container mt-4 text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+
+  if (!question)
+    return (
+      <div className="container mt-4 alert alert-danger">
+        {error || "Question not found"}
+      </div>
+    );
 
   return (
     <div className="container mt-4">
       <Link to="/" className="btn btn-secondary mb-3">
-        Back to Questions
+        &larr; Back to Questions
       </Link>
-      <h2>{question.title}</h2>
-      <p>{question.description}</p>
-      <small>Posted by {question.username}</small>
-      {user?.userid === question.userid && (
-        <div className="mb-3">
-          <button
-            className="btn btn-warning me-2"
-            data-bs-toggle="modal"
-            data-bs-target="#editQuestionModal"
-            onClick={() =>
-              setEditQuestion({
-                title: question.title,
-                description: question.description,
-              })
-            }
+
+      {/* Question Section */}
+      <article className="card mb-4">
+        <div className="card-body">
+          <h1 className="card-title">{question.title}</h1>
+          <p className="card-text">{question.description}</p>
+          <footer className="text-muted">Posted by {question.username}</footer>
+          <small
+            className="text-muted"
+            style={{ paddingLeft: "0px", fontSize: "10px" }}
           >
-            Edit Question
-          </button>
-          <button className="btn btn-danger" onClick={handleDeleteQuestion}>
-            Delete Question
-          </button>
-        </div>
-      )}
-      <h4 className="mt-4">Answers</h4>
-      {error && <div className="alert alert-danger">{error}</div>}
-      {answers.length === 0 ? (
-        <p>No answers yet.</p>
-      ) : (
-        <div className="list-group mb-4">
-          {answers.map((answer) => (
-            <div key={answer.answerid} className="list-group-item">
-              <p>{answer.answer}</p>
-              <small>Posted by {answer.username}</small>
-              {user?.userid === answer.userid && (
-                <div className="mt-2">
-                  <button
-                    className="btn btn-warning btn-sm me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editAnswerModal"
-                    onClick={() =>
-                      setEditAnswer({
-                        answerid: answer.answerid,
-                        answer: answer.answer,
-                      })
-                    }
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteAnswer(answer.answerid)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
+            {format(new Date(question.created_at), "MMM d, yyyy, hh:mm a")}
+          </small>
+
+          {user?.userid === question.userid && (
+            <div className="mt-3">
+              <button
+                className="btn btn-warning me-2"
+                onClick={openEditQuestionModal}
+              >
+                Edit Question
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDelete(questionid, "question")}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Deleting..." : "Delete Question"}
+              </button>
             </div>
-          ))}
+          )}
         </div>
-      )}
-      <h5>Post Your Answer</h5>
-      <form onSubmit={handleAnswerSubmit}>
-        <div className="mb-3">
-          <textarea
-            className="form-control"
-            value={newAnswer}
-            onChange={(e) => setNewAnswer(e.target.value)}
-            placeholder="Your answer"
-            rows={4}
-            required
-          ></textarea>
+      </article>
+
+      {/* Answers Section */}
+      <section className="mb-4">
+        <h2>Answers ({answers.length})</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        {answers.length === 0 ? (
+          <div className="alert alert-info">
+            No answers yet. Be the first to respond!
+          </div>
+        ) : (
+          <div className="list-group">
+            {answers.map((answer) => (
+              <article key={answer.answerid} className="list-group-item">
+                <p className="mb-1">{answer.answer}</p>
+                <small className="text-muted">
+                  Posted by {answer.username}
+                </small>
+                <small
+                  className="text-muted"
+                  style={{ paddingLeft: "10px", fontSize: "10px" }}
+                >
+                  {format(new Date(answer.created_at), "MMM d, yyyy, hh:mm a")}
+                </small>
+
+                {user?.userid === answer.userid && (
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-warning btn-sm me-2"
+                      onClick={() => openEditAnswerModal(answer)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(answer.answerid, "answer")}
+                      disabled={isSubmitting}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Answer Form */}
+      <section className="card">
+        <div className="card-body">
+          <h3 className="card-title">Post Your Answer</h3>
+          <form onSubmit={handleAnswerSubmit}>
+            <div className="mb-3">
+              <textarea
+                className="form-control"
+                value={newAnswer}
+                onChange={(e) => setNewAnswer(e.target.value)}
+                placeholder="Write your answer here..."
+                rows={5}
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isSubmitting || !newAnswer.trim()}
+            >
+              {isSubmitting ? "Posting..." : "Post Answer"}
+            </button>
+          </form>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Post Answer
-        </button>
-      </form>
+      </section>
 
       {/* Edit Question Modal */}
       <div
         className="modal fade"
         id="editQuestionModal"
         tabIndex="-1"
-        aria-labelledby="editQuestionModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="editQuestionModalLabel">
-                Edit Question
-              </h5>
+              <h2 className="modal-title">Edit Question</h2>
               <button
                 type="button"
                 className="btn-close"
@@ -282,12 +364,13 @@ const Question = () => {
                     id="editTitle"
                     value={editQuestion.title}
                     onChange={(e) =>
-                      setEditQuestion({
-                        ...editQuestion,
+                      setEditQuestion((prev) => ({
+                        ...prev,
                         title: e.target.value,
-                      })
+                      }))
                     }
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="mb-3">
@@ -299,17 +382,23 @@ const Question = () => {
                     id="editDescription"
                     value={editQuestion.description}
                     onChange={(e) =>
-                      setEditQuestion({
-                        ...editQuestion,
+                      setEditQuestion((prev) => ({
+                        ...prev,
                         description: e.target.value,
-                      })
+                      }))
                     }
-                    rows={4}
+                    rows={5}
                     required
-                  ></textarea>
+                    disabled={isSubmitting}
+                  />
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  Save Changes
+                {error && <div className="alert alert-danger">{error}</div>}
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>
               </form>
             </div>
@@ -322,15 +411,12 @@ const Question = () => {
         className="modal fade"
         id="editAnswerModal"
         tabIndex="-1"
-        aria-labelledby="editAnswerModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="editAnswerModalLabel">
-                Edit Answer
-              </h5>
+              <h2 className="modal-title">Edit Answer</h2>
               <button
                 type="button"
                 className="btn-close"
@@ -341,22 +427,27 @@ const Question = () => {
             <div className="modal-body">
               <form onSubmit={handleEditAnswer}>
                 <div className="mb-3">
-                  <label htmlFor="editAnswerText" className="form-label">
-                    Answer
-                  </label>
                   <textarea
                     className="form-control"
-                    id="editAnswerText"
                     value={editAnswer.answer}
                     onChange={(e) =>
-                      setEditAnswer({ ...editAnswer, answer: e.target.value })
+                      setEditAnswer((prev) => ({
+                        ...prev,
+                        answer: e.target.value,
+                      }))
                     }
-                    rows={4}
+                    rows={5}
                     required
-                  ></textarea>
+                    disabled={isSubmitting}
+                  />
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  Save Changes
+                {error && <div className="alert alert-danger">{error}</div>}
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>
               </form>
             </div>

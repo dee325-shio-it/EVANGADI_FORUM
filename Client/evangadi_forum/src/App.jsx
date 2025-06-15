@@ -23,7 +23,7 @@ function App() {
             <Route path="ask" element={<Ask />} />
           </Route>
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
         </Routes>
