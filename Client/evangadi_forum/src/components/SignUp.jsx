@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { baseURL } from "../utils/api";
 
 const SignUp = () => {
@@ -11,10 +11,15 @@ const SignUp = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
@@ -118,27 +123,50 @@ const SignUp = () => {
           />
         </div>
 
-        {/* Password Field */}
-        <div className="mb-4">
+        {/* Password Field with Toggle */}
+        <div className="mb-4 position-relative">
           <input
-            type="password"
-            className="form-control form-input"
+            type={showPassword ? "text" : "password"}
+            className="form-control form-input pe-5"
             placeholder="Password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
           />
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={togglePasswordVisibility}
+            style={{
+              position: "absolute",
+              color: "gray",
+              right: "2px",
+              fontSize: "15px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              zIndex: 5,
+            }}
+          >
+            {showPassword ? (
+              <i className="bi bi-eye-slash-fill"></i>
+            ) : (
+              <i className="bi bi-eye-fill"></i>
+            )}
+          </button>
         </div>
 
         {/* Terms Text */}
         <h6 className="my-3 text-center" style={{ fontSize: "10px" }}>
           I agree to the{" "}
-          <NavLink to="#" className="auth-link">
+          <NavLink to="#" className="auth-link" style={{ color: "#f28c38" }}>
             privacy policy
           </NavLink>{" "}
           and{" "}
-          <NavLink to="#" className="auth-link">
+          <NavLink to="#" className="auth-link" style={{ color: "#f28c38" }}>
             terms of service
           </NavLink>
         </h6>
@@ -155,14 +183,6 @@ const SignUp = () => {
           </NavLink>
         </div>
       </form>
-      <p className="text-center mt-2">
-        <NavLink
-          to="/auth?tab=login"
-          style={{ color: "#f28c38", textDecoration: "none" }}
-        >
-          Already have an account?
-        </NavLink>
-      </p>
     </div>
   );
 };

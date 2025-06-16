@@ -9,6 +9,11 @@ const ResetPassword = () => {
 
   const [newPassword, setNewPassword] = useState("");
   const [status, setStatus] = useState({ type: "", message: "" });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,20 +43,43 @@ const ResetPassword = () => {
       >
         <h2 className="mb-4 text-center">Reset Your Password</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="newPassword" className="form-label">
+          <div className="mb-3 position-relative">
+            {/* <label htmlFor="newPassword" className="form-label">
               Enter new password:
-            </label>
+            </label> */}
             <input
               id="newPassword"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               minLength={8}
-              className="form-control"
+              className="form-control pe-5" // Added right padding
               placeholder="New password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
+            <button
+              type="button"
+              className="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2"
+              onClick={togglePasswordVisibility}
+              style={{
+                position: "absolute !important",
+                color: "gray",
+                right: "2px",
+                fontSize: "15px",
+                top: "50%",
+                transform: "translateY(-50%) !important",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                zIndex: 5,
+              }}
+            >
+              {showPassword ? (
+                <i className="bi bi-eye-slash-fill"></i>
+              ) : (
+                <i className="bi bi-eye-fill"></i>
+              )}
+            </button>
           </div>
           <button type="submit" className="btn btn-primary w-100 mb-3">
             Reset Password

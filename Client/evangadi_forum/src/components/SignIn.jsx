@@ -1,10 +1,9 @@
 // Sigin.jsx
 
 import { useState } from "react";
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../utils/auth";
 import { baseURL } from "../utils/api";
-// import "./SignIn.css";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -23,6 +22,10 @@ const SignIn = () => {
     }));
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -32,9 +35,7 @@ const SignIn = () => {
       const response = await baseURL.post("/api/auth/login", formData);
       console.log(response);
 
-      // Call login and wait for it to complete
       await login(response.data.token);
-
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);

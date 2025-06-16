@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useSearchParams } from "react-router-dom";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
-
+import "bootstrap-icons/font/bootstrap-icons.css";
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const [showSignUp, setShowSignUp] = useState(false);
