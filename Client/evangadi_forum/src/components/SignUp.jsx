@@ -4,8 +4,8 @@ import { baseURL } from "../utils/api";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    username: "",
     firstName: "",
+    username: "",
     lastName: "",
     email: "",
     password: "",
